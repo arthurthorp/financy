@@ -3,15 +3,44 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CategoryModel {
+  color: String!
+  countTransactions: Float!
+  createdAt: DateTimeISO!
+  description: String
+  icon: String!
+  id: ID!
+  title: String!
+  transactions: [TransactionModel!]
+  updatedAt: DateTimeISO!
+  user: UserModel
+}
+
+input CreateCategoryInput {
+  color: String!
+  description: String
+  icon: String!
+  title: String!
+}
+
+input CreateTransactionInput {
+  amountInCents: Float!
+  categoryId: String!
+  date: String!
+  description: String!
+  type: TransactionType!
+}
+
+type DashboardOutput {
+  monthExpensesInCents: Float!
+  monthRevenueInCents: Float!
+  totalBalanceInCents: Float!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
 """
 scalar DateTimeISO
-
-input LoginInput {
-  email: String!
-  password: String!
-}
 
 type LoginOutput {
   refreshToken: String!
@@ -20,14 +49,35 @@ type LoginOutput {
 }
 
 type Mutation {
-  login(data: LoginInput!): LoginOutput!
+  createCategory(data: CreateCategoryInput!): CategoryModel!
+  createTransaction(data: CreateTransactionInput!): TransactionModel!
+  deleteCategory(id: String!): Boolean!
+  deleteTransaction(id: String!): Boolean!
+  login(data: UpdateUserInput!): UserModel!
   logout: Boolean!
   refreshToken(refreshToken: String!): LoginOutput!
   register(data: RegisterInput!): RegisterOutput!
+  updateCategory(data: CreateCategoryInput!, id: String!): CategoryModel!
+  updateTransaction(data: CreateTransactionInput!, id: String!): TransactionModel!
+}
+
+input PaginatedTransactionsInput {
+  limit: Float! = 10
+  page: Float! = 1
+}
+
+type PaginatedTransactionsOutput {
+  currentPage: Float!
+  data: [TransactionModel!]!
+  total: Float!
+  totalPages: Float!
 }
 
 type Query {
-  listCategories: String!
+  homeDashboard: DashboardOutput!
+  listCategories: [CategoryModel!]!
+  listRecentsTransactions: [TransactionModel!]!
+  listTransactions(pagination: PaginatedTransactionsInput!): PaginatedTransactionsOutput!
 }
 
 input RegisterInput {
@@ -40,6 +90,29 @@ type RegisterOutput {
   refreshToken: String!
   token: String!
   user: UserModel!
+}
+
+type TransactionModel {
+  amountInCents: Float!
+  category: CategoryModel
+  categoryId: String!
+  createdAt: DateTimeISO!
+  date: DateTimeISO!
+  description: String!
+  id: ID!
+  type: TransactionType!
+  updatedAt: DateTimeISO!
+  user: UserModel
+  userId: String!
+}
+
+enum TransactionType {
+  EXPENSE
+  REVENUE
+}
+
+input UpdateUserInput {
+  name: String!
 }
 
 type UserModel {
