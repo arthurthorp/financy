@@ -9,7 +9,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <main className="mx-auto px-16 py-4">{children}</main>
+      <main className="mx-auto px-6 md:px-16 py-4">{children}</main>
       <Toaster />
     </div>
   );

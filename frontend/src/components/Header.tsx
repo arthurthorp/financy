@@ -2,15 +2,17 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/auth";
 import logoIcon from "@/assets/logo.svg";
 import { Button } from "./ui/button";
-import { Lightbulb, LogOut, Users } from "lucide-react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Anchor } from "./ui/anchor";
+import { getInitials } from "@/utils/getInitials";
 
 export function Header() {
   const { user, logout, isAuthenticated } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
-  const isIdeasPage = location.pathname === "/";
-  const isMembersPage = location.pathname === "/members";
+  const isDashboardPage = location.pathname === "/dashboard";
+  const isTransactionsPage = location.pathname === "/transactions";
+  const isCategoriesPage = location.pathname === "/categories";
   const isLoginOrRegisterPage =
     location.pathname === "/login" || location.pathname === "/register";
 
@@ -22,51 +24,48 @@ export function Header() {
   if (isLoginOrRegisterPage) return <></>;
 
   return (
-    <div className="w-full px-16 pt-6">
+    <div className="w-full bg-white border-b-gray-200 h-17.25 px-12 py-4">
       {isAuthenticated && (
         <div className="flex justify-between w-full">
           <div className="min-w-48">
             <img src={logoIcon} />
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/">
-              <Button
-                size="sm"
-                className="gap-2"
-                variant={isIdeasPage ? "default" : "ghost"}
-              >
-                <Lightbulb className="h-4 w-4" />
-                Ideais
-              </Button>
-            </Link>
-            <Link to="/members">
-              <Button
-                size="sm"
-                className="gap-2"
-                variant={isMembersPage ? "default" : "ghost"}
-              >
-                <Users className="h-4 w-4" />
-                Membros
-              </Button>
-            </Link>
+            <Anchor
+              className="text-gray-600 hover:text-primary hover:no-underline! hover:font-semibold transition-all duration-200"
+              active={isDashboardPage}
+              to="/dashboard"
+            >
+              Dashboard
+            </Anchor>
+
+            <Anchor
+              className="text-gray-600 hover:text-primary hover:no-underline! hover:font-semibold transition-all duration-200"
+              active={isTransactionsPage}
+              to="/transactions"
+            >
+              Transações
+            </Anchor>
+
+            <Anchor
+              className="text-gray-600 hover:text-primary hover:no-underline! hover:font-semibold transition-all duration-200"
+              active={isCategoriesPage}
+              to="/categories"
+            >
+              Categorias
+            </Anchor>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2">
-              <Avatar>
-                <AvatarFallback className="bg-zinc-950 text-primary-foreground">
-                  {user?.name?.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <span className="text-sm font-medium">{user?.name}</span>
-                <span className="text-xs text-muted-foreground">
-                  {user?.email}
-                </span>
-              </div>
+              <Link to="/profile">
+                <Avatar>
+                  <AvatarFallback className="bg-gray-300 text-gray-800">
+                    {getInitials(user?.name || "")}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
             </div>
-            <Button variant="ghost" size="icon" onClick={handleLogout}>
-              <LogOut className="w-5 h-5" />
-            </Button>
+            <Button variant="ghost" size="icon" onClick={handleLogout}></Button>
           </div>
         </div>
       )}

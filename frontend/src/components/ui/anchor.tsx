@@ -1,13 +1,18 @@
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 
-export function Anchor({
-  className,
-  ...props
-}: React.ComponentProps<typeof Link>) {
+type AnchorProps = {
+  active?: boolean;
+} & React.ComponentProps<typeof Link>;
+
+export function Anchor({ className, active = false, ...props }: AnchorProps) {
   return (
     <Link
-      className={cn("text-blue-500 hover:underline", className)}
+      className={cn(
+        "text-primary",
+        className,
+        active ? "font-semibold" : "hover:underline"
+      )}
       {...props}
     />
   );
