@@ -8,7 +8,7 @@ import { SetContextLink } from "@apollo/client/link/context";
 import { useAuthStore } from "../../stores/auth";
 import { errorLink } from "./errorLink";
 
-const uri = "http://localhost:4000/graphql";
+const uri = import.meta.env.VITE_BACKEND_URL;
 
 const httpLink = new HttpLink({
   uri,
