@@ -1,15 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { apolloClient } from "@/lib/graphql/apollo";
 import { GET_CATEGORIES } from "@/lib/graphql/queries/getCategories";
-
-export type Category = {
-  id: string;
-  title: string;
-  description?: string;
-  icon: string;
-  color: string;
-  countTransactions?: number;
-};
+import { Category } from "@/types";
 
 type GetCategoriesOutput = {
   listCategories: Category[];

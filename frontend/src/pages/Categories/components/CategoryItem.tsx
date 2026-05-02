@@ -1,11 +1,14 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Category } from "@/hooks/useCategories";
 import { ColorBadge } from "@/components/ui/color-badge";
 import { CategoryIcon } from "@/components/ui/category-icon";
 import { EntityActions } from "@/components/EntityActions";
 import { CategoryForm } from "./CategoryForm";
 import { toast } from "sonner";
-import { UpdateCategoryOutput, UpdateCategoryVariables } from "@/types";
+import {
+  Category,
+  UpdateCategoryOutput,
+  UpdateCategoryVariables,
+} from "@/types";
 import { apolloClient } from "@/lib/graphql/apollo";
 import { UPDATE_CATEGORY } from "@/lib/graphql/mutations/UpdateCategory";
 import { useQueryClient } from "@tanstack/react-query";
@@ -45,6 +48,10 @@ export function CategoryItem({ category }: CategoryItemProps) {
       queryClient.invalidateQueries({
         queryKey: ["categories"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
+      });
     } catch {
       toast.error("Erro ao atualizar categoria");
     }
@@ -63,6 +70,10 @@ export function CategoryItem({ category }: CategoryItemProps) {
 
       queryClient.invalidateQueries({
         queryKey: ["categories"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
       });
     } catch {
       toast.error("Erro ao remover categoria");

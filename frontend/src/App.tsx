@@ -7,6 +7,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Profile } from "./pages/Profile";
 import { Categories } from "./pages/Categories";
 import { Login } from "./pages/Auth/Login";
+import { Transactions } from "./pages/Transactions";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, _hasHydrated } = useAuthStore();
@@ -44,6 +45,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Categories />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoute>
+                <Transactions />
               </ProtectedRoute>
             }
           />

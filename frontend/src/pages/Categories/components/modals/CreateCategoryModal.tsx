@@ -43,6 +43,10 @@ export function CreateCategoryModal() {
       queryClient.invalidateQueries({
         queryKey: ["categories"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard"],
+      });
     } catch {
       toast.error("Erro ao criar categoria");
     } finally {

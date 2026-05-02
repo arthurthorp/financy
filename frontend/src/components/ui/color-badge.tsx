@@ -1,4 +1,3 @@
-// components/ui/color-badge.tsx
 import { Badge } from "@/components/ui/badge";
 import { colorMap } from "@/lib/colors";
 import { cn } from "@/lib/utils";

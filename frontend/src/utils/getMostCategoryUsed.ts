@@ -1,4 +1,4 @@
-import { Category } from "@/hooks/useCategories";
+import { Category } from "@/types";
 
 export function getMostUsedCategory(categories: Category[]) {
   if (!categories?.length) return null;

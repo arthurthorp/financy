@@ -1,4 +1,3 @@
-// components/ui/entity-actions.tsx
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +25,7 @@ interface EntityActionsProps {
   editContent?: React.ReactNode;
   editTitle?: string;
   editDescription?: string;
+
   openEdit: boolean;
   setOpenEdit: (open: boolean) => void;
 
@@ -72,13 +72,7 @@ export function EntityActions({
           <TrashIcon className="w-4 h-4 text-destructive" />
         </Button>
 
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => {
-            setOpenEdit(true);
-          }}
-        >
+        <Button variant="outline" size="icon" onClick={() => setOpenEdit(true)}>
           <SquarePenIcon className="w-4 h-4" />
         </Button>
       </div>
@@ -94,6 +88,7 @@ export function EntityActions({
             <AlertDialogCancel disabled={loadingDelete}>
               Cancelar
             </AlertDialogCancel>
+
             <AlertDialogAction
               onClick={handleDelete}
               disabled={loadingDelete}
@@ -105,15 +100,22 @@ export function EntityActions({
         </AlertDialogContent>
       </AlertDialog>
 
-      <Dialog open={openEdit} onOpenChange={setOpenEdit}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editTitle}</DialogTitle>
-            <DialogDescription>{editDescription}</DialogDescription>
-          </DialogHeader>
+      <Dialog
+        open={openEdit}
+        onOpenChange={(open) => {
+          if (!open) setOpenEdit(false);
+        }}
+      >
+        {openEdit && (
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{editTitle}</DialogTitle>
+              <DialogDescription>{editDescription}</DialogDescription>
+            </DialogHeader>
 
-          {editContent}
-        </DialogContent>
+            {editContent}
+          </DialogContent>
+        )}
       </Dialog>
     </>
   );
