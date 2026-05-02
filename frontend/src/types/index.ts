@@ -20,3 +20,23 @@ export interface LoginInput {
 export interface UpdateUserInput {
   name: string;
 }
+
+export interface CreateCategoryInput {
+  title: string;
+  description?: string;
+  icon: string;
+  color: string;
+}
+
+export type UpdateCategoryVariables = {
+  data: CreateCategoryInput;
+  updateCategoryId: string;
+};
+
+export interface RefreshTokenOutput {
+  refreshToken: {
+    token: string;
+    refreshToken: string;
+    user: User;
+  };
+}

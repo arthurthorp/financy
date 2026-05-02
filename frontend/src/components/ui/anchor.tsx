@@ -11,7 +11,7 @@ export function Anchor({ className, active = false, ...props }: AnchorProps) {
       className={cn(
         "text-primary",
         className,
-        active ? "font-semibold" : "hover:underline"
+        active ? "font-semibold text-primary" : "hover:underline"
       )}
       {...props}
     />

@@ -1,14 +1,21 @@
-import { ApolloClient, HttpLink, ApolloLink, InMemoryCache } from "@apollo/client"
-import { SetContextLink } from "@apollo/client/link/context"
-import { useAuthStore } from '../../stores/auth'
+import {
+  ApolloClient,
+  HttpLink,
+  ApolloLink,
+  InMemoryCache,
+} from "@apollo/client";
+import { SetContextLink } from "@apollo/client/link/context";
+import { useAuthStore } from "../../stores/auth";
+import { errorLink } from "./errorLink";
 
+const uri = "http://localhost:4000/graphql";
 
 const httpLink = new HttpLink({
-    uri: "http://localhost:4000/graphql"
-})
+  uri,
+});
 
 const authLink = new SetContextLink((prevContext) => {
-  const token = useAuthStore.getState().token
+  const token = useAuthStore.getState().token;
   return {
     headers: {
       ...prevContext.headers,
@@ -18,6 +25,13 @@ const authLink = new SetContextLink((prevContext) => {
 });
 
 export const apolloClient = new ApolloClient({
-  link: ApolloLink.from([authLink, httpLink]),
-  cache: new InMemoryCache()
-})
+  link: ApolloLink.from([errorLink, authLink, httpLink]),
+  cache: new InMemoryCache(),
+});
+
+export const refreshClient = new ApolloClient({
+  link: new HttpLink({
+    uri,
+  }),
+  cache: new InMemoryCache(),
+});
