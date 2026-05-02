@@ -42,6 +42,9 @@ export function TransactionActions({ transaction }: Props) {
 
         queryClient.invalidateQueries({ queryKey: ["transactions"] });
         queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+        queryClient.invalidateQueries({
+          queryKey: ["recent_transactions"],
+        });
 
         setOpenEdit(false);
       } catch {
@@ -64,6 +67,9 @@ export function TransactionActions({ transaction }: Props) {
 
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({
+        queryKey: ["recent_transactions"],
+      });
 
       toast.success("Transação removida com sucesso!");
     } catch {

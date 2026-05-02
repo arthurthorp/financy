@@ -8,7 +8,10 @@ export const GET_CATEGORIES = gql`
       description
       icon
       color
-      countTransactions
+      transactionsSummary {
+        count
+        totalAmountInCents
+      }
     }
   }
 `;

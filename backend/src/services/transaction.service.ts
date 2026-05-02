@@ -84,60 +84,86 @@ export class TransactionService {
     });
   }
 
+  async sumAmountByCategoryId(categoryId: string): Promise<number> {
+    const transactions = await prisma.transaction.findMany({
+      where: { categoryId },
+      select: {
+        amountInCents: true,
+        type: true,
+      },
+    });
+
+    return transactions.reduce((acc, transaction) => {
+      const value =
+        transaction.type === "EXPENSE"
+          ? -transaction.amountInCents
+          : transaction.amountInCents;
+
+      return acc + value;
+    }, 0);
+  }
+
   async transactionsResume(userId: string): Promise<DashboardOutput> {
     const now = new Date();
 
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const startOfMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0)
+    );
 
-    const totalRevenue = await prisma.transaction.aggregate({
-      where: {
-        userId,
-        type: "REVENUE",
-      },
-      _sum: {
-        amountInCents: true,
-      },
-    });
+    const endOfMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999)
+    );
 
-    const totalExpense = await prisma.transaction.aggregate({
-      where: {
-        userId,
-        type: "EXPENSE",
-      },
-      _sum: {
-        amountInCents: true,
-      },
-    });
+    const [totalRevenue, totalExpense, monthRevenue, monthExpense] =
+      await Promise.all([
+        prisma.transaction.aggregate({
+          where: {
+            userId,
+            type: "REVENUE",
+          },
+          _sum: {
+            amountInCents: true,
+          },
+        }),
 
-    // MÊS
-    const monthRevenue = await prisma.transaction.aggregate({
-      where: {
-        userId,
-        type: "REVENUE",
-        date: {
-          gte: startOfMonth,
-          lte: endOfMonth,
-        },
-      },
-      _sum: {
-        amountInCents: true,
-      },
-    });
+        prisma.transaction.aggregate({
+          where: {
+            userId,
+            type: "EXPENSE",
+          },
+          _sum: {
+            amountInCents: true,
+          },
+        }),
 
-    const monthExpense = await prisma.transaction.aggregate({
-      where: {
-        userId,
-        type: "EXPENSE",
-        date: {
-          gte: startOfMonth,
-          lte: endOfMonth,
-        },
-      },
-      _sum: {
-        amountInCents: true,
-      },
-    });
+        prisma.transaction.aggregate({
+          where: {
+            userId,
+            type: "REVENUE",
+            date: {
+              gte: startOfMonth,
+              lte: endOfMonth,
+            },
+          },
+          _sum: {
+            amountInCents: true,
+          },
+        }),
+
+        prisma.transaction.aggregate({
+          where: {
+            userId,
+            type: "EXPENSE",
+            date: {
+              gte: startOfMonth,
+              lte: endOfMonth,
+            },
+          },
+          _sum: {
+            amountInCents: true,
+          },
+        }),
+      ]);
 
     return {
       totalBalanceInCents:

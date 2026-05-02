@@ -91,8 +91,7 @@ export function TransactionFiltersForm({ categories, onChange }: Props) {
 
   return (
     <Card className="w-full rounded-xl border py-5 px-6 mt-8">
-      <div className="flex justify-between gap-4">
-        {/* DESCRIÇÃO */}
+      <div className="flex flex-col lg:flex-row justify-between gap-4">
         <FormGroup>
           <Label>Descrição</Label>
           <InputGroup>
@@ -106,7 +105,6 @@ export function TransactionFiltersForm({ categories, onChange }: Props) {
           </InputGroup>
         </FormGroup>
 
-        {/* TYPE */}
         <FormGroup>
           <Label>Tipo</Label>
 
@@ -135,7 +133,6 @@ export function TransactionFiltersForm({ categories, onChange }: Props) {
           />
         </FormGroup>
 
-        {/* CATEGORY */}
         <FormGroup>
           <Label>Categoria</Label>
 
@@ -168,7 +165,6 @@ export function TransactionFiltersForm({ categories, onChange }: Props) {
           />
         </FormGroup>
 
-        {/* PERIOD */}
         <FormGroup>
           <Label>Período</Label>
 

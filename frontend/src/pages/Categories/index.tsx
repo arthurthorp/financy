@@ -16,7 +16,7 @@ export function Categories() {
 
   return (
     <section>
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between">
+      <div className="flex gap-2 flex-col md:flex-row md:items-center md:justify-between">
         <PageTitle
           title="Categorias"
           subtitle="Organize suas transações por categorias"
@@ -27,7 +27,7 @@ export function Categories() {
 
       {!isLoading && data && (
         <>
-          <div className="mt-8 flex flex-wrap gap-6 items-center">
+          <div className="mt-8 flex flex-col flex-wrap md:flex-nowrap lg:flex-row gap-6 items-center">
             <StatsCard
               variant="compact"
               title="Total de Categorias"
@@ -39,7 +39,8 @@ export function Categories() {
               variant="compact"
               title="Total de Transações"
               value={data.reduce(
-                (acc, category) => acc + (category.countTransactions ?? 0),
+                (acc, category) =>
+                  acc + (category.transactionsSummary.count ?? 0),
                 0
               )}
               icon={<ArrowUpDownIcon className="text-chart-2" />}

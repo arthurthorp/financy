@@ -15,6 +15,7 @@ import { CategoryService } from "../services/category.service";
 import { CategoryModel } from "../models/category.model";
 import { CreateCategoryInput } from "../dtos/input/category.input";
 import { TransactionService } from "../services/transaction.service";
+import { CategorySummaryModel } from "../models/category-summary.model";
 
 @Resolver(() => CategoryModel)
 @UseMiddleware(isAuth)
@@ -54,8 +55,18 @@ export class CategoryResolver {
     return true;
   }
 
-  @FieldResolver(() => Int)
-  async countTransactions(@Root() category: CategoryModel): Promise<number> {
-    return this.transactionService.countTransactionsByCategoryId(category.id);
+  @FieldResolver(() => CategorySummaryModel)
+  async transactionsSummary(
+    @Root() category: CategoryModel
+  ): Promise<CategorySummaryModel> {
+    const [count, sum] = await Promise.all([
+      this.transactionService.countTransactionsByCategoryId(category.id),
+      this.transactionService.sumAmountByCategoryId(category.id),
+    ]);
+
+    return {
+      count,
+      totalAmountInCents: sum,
+    };
   }
 }

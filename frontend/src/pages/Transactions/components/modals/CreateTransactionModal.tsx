@@ -19,13 +19,17 @@ import { CreateTransactionInput } from "@/types";
 import { reaisToCents } from "@/utils/currency";
 
 type Props = {
+  variant?: "default" | "ghost";
   categories: {
     id: string;
     title: string;
   }[];
 };
 
-export function CreateTransactionModal({ categories }: Props) {
+export function CreateTransactionModal({
+  categories,
+  variant = "default",
+}: Props) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -56,6 +60,9 @@ export function CreateTransactionModal({ categories }: Props) {
       });
 
       queryClient.invalidateQueries({
+        queryKey: ["recent_transactions"],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["dashboard"],
       });
     } catch (error) {
@@ -69,10 +76,17 @@ export function CreateTransactionModal({ categories }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="h-9 px-3 py-2.5">
-          <PlusIcon />
-          <span>Nova transação</span>
-        </Button>
+        {variant === "default" ? (
+          <Button className="h-9 px-3 py-2.5">
+            <PlusIcon />
+            <span>Nova transação</span>
+          </Button>
+        ) : (
+          <Button variant="ghost" className="gap-2 text-primary ">
+            <PlusIcon className="w-4 h-4" />
+            Nova transação
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent>

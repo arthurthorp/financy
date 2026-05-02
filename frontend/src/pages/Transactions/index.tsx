@@ -43,7 +43,7 @@ export function Transactions() {
 
   return (
     <section>
-      <div className="flex flex-col-reverse md:flex-row items-center justify-between">
+      <div className="flex gap-2 flex-col md:flex-row md:items-center md:justify-between">
         <PageTitle
           title="Transações"
           subtitle="Gerencie todas as suas transações financeiras"

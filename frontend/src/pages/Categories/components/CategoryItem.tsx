@@ -20,7 +20,7 @@ interface CategoryItemProps {
 }
 
 export function CategoryItem({ category }: CategoryItemProps) {
-  const categoryItems = category.countTransactions ?? 0;
+  const categoryItems = category.transactionsSummary.count ?? 0;
   const queryClient = useQueryClient();
   const [openEdit, setOpenEdit] = useState(false);
 
@@ -75,13 +75,17 @@ export function CategoryItem({ category }: CategoryItemProps) {
       queryClient.invalidateQueries({
         queryKey: ["dashboard"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["recent_transactions"],
+      });
     } catch {
       toast.error("Erro ao remover categoria");
     }
   };
 
   return (
-    <Card className="w-[320px] rounded-xl">
+    <Card className="w-full md:w-[320px] rounded-xl">
       <CardContent className="p-4 flex flex-col gap-4">
         <div className="flex items-start justify-between">
           <CategoryIcon color={category.color} icon={category.icon} />

@@ -5,15 +5,20 @@
 
 type CategoryModel {
   color: String!
-  countTransactions: Int!
   createdAt: DateTimeISO!
   description: String
   icon: String!
   id: ID!
   title: String!
   transactions: [TransactionModel!]
+  transactionsSummary: CategorySummaryModel!
   updatedAt: DateTimeISO!
   user: UserModel
+}
+
+type CategorySummaryModel {
+  count: Int!
+  totalAmountInCents: Int!
 }
 
 input CreateCategoryInput {

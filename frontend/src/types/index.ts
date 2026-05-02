@@ -12,7 +12,10 @@ export type Category = {
   description?: string;
   icon: string;
   color: string;
-  countTransactions?: number;
+  transactionsSummary: {
+    count: number;
+    totalAmountInCents: number;
+  };
 };
 
 export type Transaction = {
@@ -30,6 +33,18 @@ export type ListTransactionsOutput = {
     total: number;
     totalPages: number;
     currentPage: number;
+  };
+};
+
+export type ListRecentTransactionsOutput = {
+  listRecentsTransactions: Transaction[];
+};
+
+export type HomeDashboardOutput = {
+  homeDashboard: {
+    monthExpensesInCents: number;
+    totalBalanceInCents: number;
+    monthRevenueInCents: number;
   };
 };
 
