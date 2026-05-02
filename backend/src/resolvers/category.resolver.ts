@@ -1,6 +1,7 @@
 import {
   Arg,
   FieldResolver,
+  Int,
   Mutation,
   Query,
   Resolver,
@@ -53,8 +54,8 @@ export class CategoryResolver {
     return true;
   }
 
-  @FieldResolver(() => Number)
-  async countTransactions(@Root() category: CategoryModel): Promise<Number> {
+  @FieldResolver(() => Int)
+  async countTransactions(@Root() category: CategoryModel): Promise<number> {
     return this.transactionService.countTransactionsByCategoryId(category.id);
   }
 }

@@ -1,30 +1,64 @@
 import { prisma } from "../../prisma/prisma";
 import {
   CreateTransactionInput,
-  PaginatedTransactionsInput,
+  ListTransactionsInput,
 } from "../dtos/input/transaction.input";
 import { DashboardOutput } from "../dtos/output/dashboard.output";
 import { PaginatedTransactionsOutput } from "../dtos/output/transaction.output";
 import { TransactionModel } from "../models/transaction.model";
+import { normalizeDate } from "../utils/normalizeDate";
 
 export class TransactionService {
   async listByUserId(
-    pagination: PaginatedTransactionsInput,
+    input: ListTransactionsInput,
     userId: string
   ): Promise<PaginatedTransactionsOutput> {
-    const { page, limit } = pagination;
+    const { page, limit, filters } = input;
 
     const skip = (page - 1) * limit;
 
+    const where: any = {
+      userId,
+    };
+
+    if (filters?.description) {
+      where.description = {
+        contains: filters.description,
+      };
+    }
+
+    if (filters?.type) {
+      where.type = filters.type;
+    }
+
+    if (filters?.categoryId) {
+      where.categoryId = filters.categoryId;
+    }
+
+    if (filters?.month || filters?.year) {
+      const year = filters.year ?? new Date().getFullYear();
+      const month = filters.month;
+
+      const startDate = new Date(Date.UTC(year, (month ?? 1) - 1, 1));
+      const endDate = month
+        ? new Date(Date.UTC(year, month, 1))
+        : new Date(Date.UTC(year + 1, 0, 1));
+
+      where.date = {
+        gte: startDate,
+        lt: endDate,
+      };
+    }
+
     const [data, total] = await Promise.all([
       prisma.transaction.findMany({
-        where: { userId },
+        where,
         orderBy: { date: "desc" },
         skip,
         take: limit,
       }),
       prisma.transaction.count({
-        where: { userId },
+        where,
       }),
     ]);
 
@@ -122,7 +156,7 @@ export class TransactionService {
 
     const { description, amountInCents, categoryId, date, type } = data;
 
-    const findCategory = await prisma.transaction.findUnique({
+    const findCategory = await prisma.category.findUnique({
       where: {
         id: categoryId,
         userId,
@@ -136,7 +170,7 @@ export class TransactionService {
         description,
         type,
         amountInCents,
-        date,
+        date: normalizeDate(date),
         categoryId,
         userId,
       },
@@ -167,7 +201,7 @@ export class TransactionService {
         description,
         type,
         amountInCents,
-        date: new Date(date),
+        date: normalizeDate(date),
         categoryId,
       },
     });

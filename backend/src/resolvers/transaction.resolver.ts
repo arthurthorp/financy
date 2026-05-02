@@ -14,7 +14,7 @@ import { TransactionService } from "../services/transaction.service";
 import { TransactionModel } from "../models/transaction.model";
 import {
   CreateTransactionInput,
-  PaginatedTransactionsInput,
+  ListTransactionsInput,
 } from "../dtos/input/transaction.input";
 import { CategoryModel } from "../models/category.model";
 import { CategoryService } from "../services/category.service";
@@ -28,11 +28,11 @@ export class TransactionResolver {
 
   @Query(() => PaginatedTransactionsOutput)
   listTransactions(
-    @Arg("pagination", () => PaginatedTransactionsInput)
-    pagination: PaginatedTransactionsInput,
+    @Arg("input", () => ListTransactionsInput)
+    input: ListTransactionsInput,
     @GqlUser() user: User
   ): Promise<PaginatedTransactionsOutput> {
-    return this.transactionService.listByUserId(pagination, user.id);
+    return this.transactionService.listByUserId(input, user.id);
   }
 
   @Query(() => [TransactionModel])

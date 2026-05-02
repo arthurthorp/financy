@@ -1,13 +1,13 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class DashboardOutput {
-  @Field(() => Number)
+  @Field(() => Int)
   totalBalanceInCents!: number;
 
-  @Field(() => Number)
+  @Field(() => Int)
   monthRevenueInCents!: number;
 
-  @Field(() => Number)
+  @Field(() => Int)
   monthExpensesInCents!: number;
 }

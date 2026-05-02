@@ -35,3 +35,27 @@ export class PaginatedTransactionsInput {
   @Field(() => Number, { defaultValue: 10 })
   limit: number;
 }
+
+@InputType()
+export class ListTransactionsInput extends PaginatedTransactionsInput {
+  @Field(() => TransactionFiltersInput, { nullable: true })
+  filters?: TransactionFiltersInput;
+}
+
+@InputType()
+export class TransactionFiltersInput {
+  @Field(() => String, { nullable: true })
+  description?: string;
+
+  @Field(() => String, { nullable: true })
+  type?: "income" | "expense";
+
+  @Field(() => String, { nullable: true })
+  categoryId?: string;
+
+  @Field(() => Number, { nullable: true })
+  month?: number;
+
+  @Field(() => Number, { nullable: true })
+  year?: number;
+}

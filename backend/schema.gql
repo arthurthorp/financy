@@ -5,7 +5,7 @@
 
 type CategoryModel {
   color: String!
-  countTransactions: Float!
+  countTransactions: Int!
   createdAt: DateTimeISO!
   description: String
   icon: String!
@@ -32,15 +32,21 @@ input CreateTransactionInput {
 }
 
 type DashboardOutput {
-  monthExpensesInCents: Float!
-  monthRevenueInCents: Float!
-  totalBalanceInCents: Float!
+  monthExpensesInCents: Int!
+  monthRevenueInCents: Int!
+  totalBalanceInCents: Int!
 }
 
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
 """
 scalar DateTimeISO
+
+input ListTransactionsInput {
+  filters: TransactionFiltersInput
+  limit: Float! = 10
+  page: Float! = 1
+}
 
 input LoginInput {
   email: String!
@@ -67,23 +73,18 @@ type Mutation {
   updateUser(data: UpdateUserInput!): UserModel!
 }
 
-input PaginatedTransactionsInput {
-  limit: Float! = 10
-  page: Float! = 1
-}
-
 type PaginatedTransactionsOutput {
-  currentPage: Float!
+  currentPage: Int!
   data: [TransactionModel!]!
-  total: Float!
-  totalPages: Float!
+  total: Int!
+  totalPages: Int!
 }
 
 type Query {
   homeDashboard: DashboardOutput!
   listCategories: [CategoryModel!]!
   listRecentsTransactions: [TransactionModel!]!
-  listTransactions(pagination: PaginatedTransactionsInput!): PaginatedTransactionsOutput!
+  listTransactions(input: ListTransactionsInput!): PaginatedTransactionsOutput!
 }
 
 input RegisterInput {
@@ -96,6 +97,14 @@ type RegisterOutput {
   refreshToken: String!
   token: String!
   user: UserModel!
+}
+
+input TransactionFiltersInput {
+  categoryId: String
+  description: String
+  month: Float
+  type: String
+  year: Float
 }
 
 type TransactionModel {
