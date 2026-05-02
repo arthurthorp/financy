@@ -27,25 +27,27 @@ import {
   EyeClosedIcon,
   EyeIcon,
   LockIcon,
+  LogInIcon,
   MailIcon,
-  UserRoundPlusIcon,
+  UserRoundIcon,
 } from "lucide-react";
 import { FieldError } from "@/components/ui/field-error";
-import { Anchor } from "@/components/ui/anchor";
-import { Checkbox } from "@/components/ui/checkbox";
-import { FieldSeparator } from "@/components/ui/field";
+import { FieldDescription, FieldSeparator } from "@/components/ui/field";
 import { FormIcon } from "@/components/ui/form-icon";
 
-const loginSchema = z.object({
+const signUpSchema = z.object({
+  name: z.string().min(2, { message: "Nome inválido" }),
   email: z.email({ message: "Email inválido" }),
-  password: z.string().min(1, { message: "A senha inválida" }),
+  password: z
+    .string()
+    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" }),
 });
 
-type LoginForm = z.infer<typeof loginSchema>;
+type SignUpForm = z.infer<typeof signUpSchema>;
 
-export function Login() {
+export function SignUp() {
   const [loading, setLoading] = useState(false);
-  const login = useAuthStore((state) => state.login);
+  const signup = useAuthStore((state) => state.signup);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -53,24 +55,25 @@ export function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+  } = useForm<SignUpForm>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: { name: "", email: "", password: "" },
   });
 
-  const onSubmit = async (data: LoginForm) => {
+  const onSubmit = async (data: SignUpForm) => {
     setLoading(true);
     try {
-      const loginMutate = await login({
+      const loginMutate = await signup({
+        name: data.name,
         email: data.email,
         password: data.password,
       });
       if (loginMutate) {
-        toast.success("Login realizado com sucesso!");
+        toast.success("Cadastro realizado com sucesso!");
         navigate("/");
       }
     } catch {
-      toast.error("Falha ao realizar o login!");
+      toast.error("Falha ao realizar o cadastro!");
     } finally {
       setLoading(false);
     }
@@ -86,14 +89,36 @@ export function Login() {
       <Card className="w-full max-w-md rounded-xl">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-center">
-            Fazer login
+            Criar conta
           </CardTitle>
           <CardDescription className="text-center">
-            Entre na sua conta para continuar
+            Comece a controlar suas finanças ainda hoje
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <FormGroup>
+              <Label hasError={!!errors.name?.message} htmlFor="name">
+                Nome completo
+              </Label>
+              <InputGroup>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Seu nome completo"
+                  {...register("name")}
+                  disabled={loading}
+                />
+                <InputGroupAddon align="inline-start">
+                  <FormIcon
+                    icon={UserRoundIcon}
+                    hasError={!!errors.name?.message}
+                  />
+                </InputGroupAddon>
+              </InputGroup>
+
+              <FieldError message={errors.name?.message} />
+            </FormGroup>
             <FormGroup>
               <Label hasError={!!errors.email?.message} htmlFor="email">
                 Email
@@ -150,40 +175,29 @@ export function Login() {
                   </InputGroupButton>
                 </InputGroupAddon>
               </InputGroup>
+              {!errors.password?.message && (
+                <FieldDescription>
+                  A senha deve ter pelo menos 8 caracteres
+                </FieldDescription>
+              )}
 
               <FieldError message={errors.password?.message} />
             </FormGroup>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="rememberMe"
-                  className="inline-block mr-1 text-green-500"
-                />
-                <label htmlFor="rememberMe" className="text-sm text-gray-700">
-                  Lembrar-me
-                </label>
-              </div>
-              <Anchor className="text-primary" to="/forgot-password">
-                Recuperar senha
-              </Anchor>
-            </div>
+
             <Button type="submit" className="w-full" disabled={loading}>
-              Entrar
+              Cadastrar
             </Button>
           </form>
           <FieldSeparator className="my-6">ou</FieldSeparator>
 
           <span className="text-gray-600 text-sm text-center block mb-4">
-            Ainda não tem uma conta?
+            Já tem uma conta?
           </span>
 
           <Button variant="outline" className="w-full" asChild>
-            <Link
-              className="flex items-center text-gray-700 gap-2"
-              to="/signup"
-            >
-              <UserRoundPlusIcon />
-              Criar conta
+            <Link className="flex items-center text-gray-700 gap-2" to="/login">
+              <LogInIcon />
+              Fazer login
             </Link>
           </Button>
         </CardContent>

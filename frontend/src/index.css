@@ -3,8 +3,6 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: "Inter Variable", sans-serif;
@@ -40,6 +38,15 @@
 }
 
 :root {
+  --gray-100: #f8f9fa;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #111827;
+
   --background: #ffffff;
   --foreground: #111827;
 
@@ -55,7 +62,7 @@
   --secondary-foreground: #374151;
 
   --muted: #e5e7eb;
-  --muted-foreground: #6b7280;
+  --muted-foreground: var(--gray-600);
 
   --accent: #124b2b;
   --accent-foreground: #ffffff;
@@ -71,35 +78,6 @@
   --chart-3: #dc2626;
   --chart-4: #ea580c;
   --chart-5: #16a34a;
-}
-
-.dark {
-  --background: #111827;
-  --foreground: #f9fafb;
-
-  --card: #1f2937;
-  --card-foreground: #f9fafb;
-
-  --popover: #1f2937;
-  --popover-foreground: #f9fafb;
-
-  --primary: #1f6f43;
-  --primary-foreground: #ffffff;
-
-  --secondary: #374151;
-  --secondary-foreground: #f9fafb;
-
-  --muted: #374151;
-  --muted-foreground: #9ca3af;
-
-  --accent: #16a34a;
-  --accent-foreground: #ffffff;
-
-  --destructive: #ef4444;
-
-  --border: #374151;
-  --input: #4b5563;
-  --ring: #16a34a;
 }
 
 @layer base {

@@ -12,7 +12,7 @@ export class UserResolver {
   private userService = new UserService();
 
   @Mutation(() => UserModel)
-  async login(
+  async updateUser(
     @Arg("data", () => UpdateUserInput) data: UpdateUserInput,
     @GqlUser() user: User
   ): Promise<UserModel> {

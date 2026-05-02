@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client"
+import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
   mutation Login($data: LoginInput!) {
@@ -9,10 +9,9 @@ export const LOGIN = gql`
         id
         name
         email
-        role
         createdAt
         updatedAt
       }
     }
   }
-`
+`;

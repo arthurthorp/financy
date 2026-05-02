@@ -2,6 +2,7 @@ import "dotenv/config";
 import "reflect-metadata";
 import "./graphql/enums";
 import express from "express";
+import cors from "cors";
 import { buildSchema } from "type-graphql";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
@@ -30,6 +31,8 @@ async function bootstrap() {
   const server = new ApolloServer({
     schema,
   });
+
+  app.use(cors());
 
   await server.start();
 
