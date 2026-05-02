@@ -41,8 +41,6 @@ export function Transactions() {
     setPage(page);
   };
 
-  console.log("teste");
-
   return (
     <section>
       <div className="flex flex-col-reverse md:flex-row items-center justify-between">

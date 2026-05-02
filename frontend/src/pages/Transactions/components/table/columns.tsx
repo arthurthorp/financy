@@ -5,6 +5,7 @@ import { ColorBadge } from "@/components/ui/color-badge";
 import { CircleArrowDownIcon, CircleArrowUpIcon } from "lucide-react";
 import { CategoryIcon } from "@/components/ui/category-icon";
 import { TransactionActions } from "../TransactionActions";
+import { formatDateNoTimezone } from "@/utils/formatDateNoTimezone";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -25,7 +26,7 @@ export const columns: ColumnDef<Transaction>[] = [
     header: "Data",
     cell: ({ row }) => (
       <span className="text-gray-600 text-sm">
-        {new Date(row.original.date).toLocaleDateString("pt-BR")}
+        {formatDateNoTimezone(row.original.date)}
       </span>
     ),
   },

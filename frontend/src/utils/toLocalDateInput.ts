@@ -1,9 +1,9 @@
 export function toLocalDateInput(date: string | Date) {
-  const d = new Date(date);
+  const d = typeof date === "string" ? new Date(date) : date;
 
-  const offset = d.getTimezoneOffset();
+  const year = d.getUTCFullYear();
+  const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
 
-  const local = new Date(d.getTime() - offset * 60 * 1000);
-
-  return local.toISOString().split("T")[0];
+  return `${year}-${month}-${day}`;
 }
